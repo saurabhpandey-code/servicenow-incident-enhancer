@@ -4,7 +4,7 @@
         <active>true</active>
         <client>true</client>
         <client_script_v2><![CDATA[function onClick(g_form) {
-
+<!-- testing the changes -->
 }]]></client_script_v2>
         <comments/>
         <condition/>
