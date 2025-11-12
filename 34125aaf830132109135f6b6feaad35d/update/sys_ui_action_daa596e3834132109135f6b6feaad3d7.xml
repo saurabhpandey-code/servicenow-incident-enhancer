@@ -31,29 +31,27 @@
         <onclick>onClickAI()</onclick>
         <order>100</order>
         <script><![CDATA[function onClickAI() {
-    if (!confirm('Do you want to auto-fill the Description field using Category and Subcategory?')) {
-        return;
+    // Get the current Impact value from the form (returns a string like '1', '2', etc.)
+    var impact = g_form.getValue('impact');
+
+    // Read the existing Priority as a baseline; we'll update it only for matching impacts
+    var newPriority = g_form.getValue('priority');
+
+    // Map Impact to Priority as requested:
+    // Impact 1 -> Priority 1
+    // Impact 2 -> Priority 2
+    if (impact === '1') {
+        newPriority = '1';
+        g_form.setValue('priority', newPriority); // Update Priority to 1 when Impact is 1
+    } else if (impact === '2') {
+        newPriority = '2';
+        g_form.setValue('priority', newPriority); // Update Priority to 2 when Impact is 2
+    } else {
+        // For any other Impact value, leave Priority unchanged
     }
 
-    var category = g_form.getValue('category');
-    var subcategory = g_form.getValue('subcategory');
-
-    if (!category) {
-        g_form.addInfoMessage('Please select a Category first.');
-        return;
-    }
-
-    var description = 'This incident is related to ' + category;
-    if (subcategory) {
-        description += ' → ' + subcategory;
-    }
-    description += '. Please investigate and resolve as soon as possible.';
-
-	
-// test
-
-    g_form.setValue('description', description);
-    g_form.addInfoMessage('Description has been auto-filled using AI logic.');
+    // Notify the user of the resulting Priority value
+    alert('Priority is now set to: ' + newPriority);
 }
 ]]></script>
         <show_insert>true</show_insert>
