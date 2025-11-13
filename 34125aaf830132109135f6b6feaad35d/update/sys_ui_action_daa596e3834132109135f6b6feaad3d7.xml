@@ -49,7 +49,8 @@
     } else {
         // For any other Impact value, leave Priority unchanged
     }
-
+    
+    alert("Hello from Windsurf!");
     // Notify the user of the resulting Priority value
     alert('Priority is now set to: ' + newPriority);
 }
