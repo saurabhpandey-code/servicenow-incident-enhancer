@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <comments/>
+        <description>onChange Priority: show P1 runbook message and require modal confirmation before save</description>
+        <field>priority</field>
+        <isolate_script>true</isolate_script>
+        <messages/>
+        <name>CS onChange Priority P1 Confirmation</name>
+        <order>100</order>
+        <script><![CDATA[function onChange(control, oldValue, newValue, isLoading, isTemplate) {
+    // Install submit guard once (also runs on load with isLoading=true)
+    if (isLoading || isTemplate) {
+        ensureSubmitGuard();
+        return;
+    }
+
+    // Clear any previous messages on priority
+    g_form.hideFieldMsg('priority', true);
+
+    // When priority becomes 1, show prominent message
+    if (newValue === '1') {
+        g_form.showFieldMsg(
+            'priority',
+            'P1 selected. Follow the P1 runbook. You will be asked to confirm before saving.',
+            'error',
+            true
+        );
+    }
+
+    function ensureSubmitGuard() {
+        if (window._p1SubmitGuardInstalled) return;
+        window._p1SubmitGuardInstalled = true;
+
+        g_form.addSubmitCheck(function () {
+            if (g_form.getValue('priority') === '1' && !window._p1Confirmed) {
+                var gm = new GlideModal('glide_confirm_standard'); // UI Macro
+                gm.setTitle('Confirm P1 Save');
+                gm.setPreference('title', 'Confirm P1 Save');
+                gm.setPreference('question', 'Priority is P1. Confirm you have followed the P1 runbook before saving.');
+                gm.setPreference('onPromptComplete', function (answer) {
+                    if (answer === true) {
+                        window._p1Confirmed = true;
+                        g_form.submit(); // re-trigger submit after confirmation
+                    }
+                });
+                gm.render();
+                return false; // block the current submit until user responds
+            }
+            return true;
+        });
+    }
+}
+]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-11-20 17:35:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>9c3e5a2b83a132109135f6b6feaad102</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>CS onChange Priority P1 Confirmation</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Incident Enhancer" source="x_1731528_incide_1">34125aaf830132109135f6b6feaad35d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Incident Enhancer">34125aaf830132109135f6b6feaad35d</sys_scope>
+        <sys_update_name>sys_script_client_9c3e5a2b83a132109135f6b6feaad102</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-11-20 17:35:00</sys_updated_on>
+        <table>incident</table>
+        <type>onChange</type>
+        <ui_type>10</ui_type>
+    </sys_script_client>
+</record_update>
