@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_email_action">
+    <sysevent_email_action action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <alt_address/>
+        <bcc/>
+        <body><![CDATA[Hello ${assigned_to},
+
+You have a reminder for Incident ${number}.
+
+Message: ${event.parm1}
+
+Sent by: ${event.parm2}
+]]></body>
+        <condition><![CDATA[active=true]]></condition>
+        <event_name>x_1731528_incide_1.incident.reminder</event_name>
+        <event_parm_1/>
+        <event_parm_2/>
+        <exclude_delegates>false</exclude_delegates>
+        <force_synchronous>false</force_synchronous>
+        <from/>
+        <generated_by/><inherit>from_source_table</inherit>
+        <item/>
+        <name>Incident Reminder to Assigned To</name>
+        <notification_type>email</notification_type>
+        <priority>3</priority>
+        <recipient_fields>assigned_to</recipient_fields>
+        <recipients/>
+        <reply_to/>
+        <subject>Incident Reminder: ${number}</subject>
+        <sys_class_name>sysevent_email_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>3cd85a2b83a132109135f6b6feaad888</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Incident Reminder to Assigned To</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Incident Enhancer" source="x_1731528_incide_1">34125aaf830132109135f6b6feaad35d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Incident Enhancer">34125aaf830132109135f6b6feaad35d</sys_scope>
+        <sys_update_name>sysevent_email_action_3cd85a2b83a132109135f6b6feaad888</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <template/>
+        <type>event</type>
+        <weight>0</weight>
+    </sysevent_email_action>
+</record_update>

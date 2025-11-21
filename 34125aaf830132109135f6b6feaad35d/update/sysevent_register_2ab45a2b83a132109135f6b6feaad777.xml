@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sysevent_register">
+    <sysevent_register action="INSERT_OR_UPDATE">
+        <auto_comment>false</auto_comment>
+        <description>Fired when a reminder is sent from IncidentReminder</description>
+        <event_name/>
+        <fired_by>Script Include: IncidentReminder</fired_by>
+        <is_workflow>false</is_workflow>
+        <name>x_1731528_incide_1.incident.reminder</name>
+        <parm1>Reminder text</parm1>
+        <parm2>Sender sys_id</parm2>
+        <queue>events</queue>
+        <table>incident</table>
+        <sys_class_name>sysevent_register</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>2ab45a2b83a132109135f6b6feaad777</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_1731528_incide_1.incident.reminder</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Incident Enhancer" source="x_1731528_incide_1">34125aaf830132109135f6b6feaad35d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Incident Enhancer">34125aaf830132109135f6b6feaad35d</sys_scope>
+        <sys_update_name>sysevent_register_2ab45a2b83a132109135f6b6feaad777</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+    </sysevent_register>
+</record_update>
