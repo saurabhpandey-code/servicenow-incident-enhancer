@@ -31,9 +31,20 @@ IncidentReminder.prototype = {
             var assignedTo = inc.getValue('assigned_to');
             if (assignedTo) {
                 var fromUser = remindingUser || gs.getUserID();
+                var senderDisplay = '';
+                try {
+                    var usr = new GlideRecord('sys_user');
+                    if (fromUser && usr.get(fromUser)) {
+                        senderDisplay = usr.getDisplayValue();
+                    } else {
+                        senderDisplay = gs.getUserName();
+                    }
+                } catch (e1) {
+                    senderDisplay = gs.getUserName();
+                }
                 try {
                     // Prefer a namespaced event for notifications
-                    gs.eventQueue('x_1731528_incide_1.incident.reminder', inc, note, fromUser);
+                    gs.eventQueue('x_1731528_incide_1.incident.reminder', inc, note, senderDisplay);
                 } catch (e) {
                     // Optional fallback to GlideNotification if available in this instance/scope
                     try {
@@ -41,7 +52,7 @@ IncidentReminder.prototype = {
                             var gn = new GlideNotification();
                             if (typeof gn.setFromUser === 'function') gn.setFromUser(fromUser);
                             if (typeof gn.setSubject === 'function') gn.setSubject('Incident Reminder: ' + inc.getDisplayValue('number'));
-                            if (typeof gn.setBody === 'function') gn.setBody(note);
+                            if (typeof gn.setBody === 'function') gn.setBody('From: ' + senderDisplay + '\n\n' + note);
                             if (typeof gn.setRecipients === 'function') gn.setRecipients(assignedTo);
                             if (typeof gn.send === 'function') gn.send();
                         }
