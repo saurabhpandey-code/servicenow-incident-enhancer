@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name>resolve_incident</action_name>
+        <active>true</active>
+        <client>true</client>
+        <client_script_v2><![CDATA[function onClick(g_form) {
+    // Validate close code is selected
+    var closeCode = g_form.getValue('close_code');
+    if (!closeCode) {
+        g_form.showFieldMsg('close_code', 'Please select a close code', 'error');
+        return false;
+    }
+    
+    // Validate close notes are provided
+    var closeNotes = g_form.getValue('close_notes');
+    if (!closeNotes) {
+        g_form.showFieldMsg('close_notes', 'Please enter close notes', 'error');
+        return false;
+    }
+    
+    // Show confirmation dialog
+    if (confirm('Are you sure you want to resolve this incident?')) {
+        // Disable button to prevent double-clicks
+        g_form.setDisabled('resolve_incident', true);
+        
+        // Call server-side script
+        var ga = new GlideAjax('ResolveIncidentAjax');
+        ga.addParam('sysparm_name', 'resolveIncident');
+        ga.addParam('sysparm_sys_id', g_form.getUniqueValue());
+        ga.addParam('sysparm_close_code', closeCode);
+        ga.addParam('sysparm_close_notes', closeNotes);
+        
+        ga.getXMLAnswer(function(response) {
+            if (response === 'success') {
+                g_form.addInfoMessage('Incident has been resolved successfully.');
+                // Refresh the form to show updated state
+                window.location.reload(true);
+            } else {
+                g_form.addErrorMessage('Failed to resolve incident: ' + response);
+                g_form.setDisabled('resolve_incident', false);
+            }
+        });
+    }
+    
+    return false; // Prevent form submission
+}]]></client_script_v2>
+        <comments>UI Action to resolve incident with close code and notes validation</comments>
+        <condition>current.state != 7 && current.state != 6 && gs.hasRole('itil')</condition>
+        <form_action>false</form_action>
+        <form_button>true</form_button>
+        <form_button_v2>true</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_style>primary</form_style>
+        <hint>Resolve this incident with close code and notes</hint>
+        <list_action>false</list_action>
+        <name>Resolve Incident</name>
+        <onclick>onClickResolve()</onclick>
+        <script><![CDATA[function onClickResolve() {
+    // This is a placeholder for the client-side script that will be called by the UI Action
+    // The actual implementation is in client_script_v2
+}]]></script>
+        <show_insert>false</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2025-11-27 09:45:00</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>resolve_incident_12345</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>Resolve Incident</sys_name>
+        <sys_package display_value="Incident Enhancer" source="x_1731528_incide_1">34125aaf830132109135f6b6feaad35d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Incident Enhancer">34125aaf830132109135f6b6feaad35d</sys_scope>
+        <sys_update_name>sys_ui_action_resolve_incident</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2025-11-27 09:45:00</sys_updated_on>
+        <table>incident</table>
+    </sys_ui_action>
+</record_update>
