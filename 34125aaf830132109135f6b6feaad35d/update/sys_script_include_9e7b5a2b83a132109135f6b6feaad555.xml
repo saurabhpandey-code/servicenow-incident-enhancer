@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_1731528_incide_1.IncidentReminder</api_name>
+        <client_callable>false</client_callable>
+        <description>Adds a work note to an incident and notifies the assigned user.</description>
+        <name>IncidentReminder</name>
+        <script><![CDATA[var IncidentReminder = Class.create();
+IncidentReminder.prototype = {
+    initialize: function () {},
+
+    sendReminder: function (incidentSysId, message, remindingUser) {
+        try {
+            if (!incidentSysId) {
+                return { success: false, message: 'incidentSysId is required' };
+            }
+
+            var inc = new GlideRecord('incident');
+            if (!inc.get(incidentSysId)) {
+                return { success: false, message: 'Incident not found' };
+            }
+
+            var note = message || 'Reminder';
+
+            // Add a secure work note
+            inc.setValue('work_notes', note);
+            inc.update();
+
+            // Notify assigned_to, if present
+            var assignedTo = inc.getValue('assigned_to');
+            if (assignedTo) {
+                var fromUser = remindingUser || gs.getUserID();
+                var senderDisplay = '';
+                try {
+                    var usr = new GlideRecord('sys_user');
+                    if (fromUser && usr.get(fromUser)) {
+                        senderDisplay = usr.getDisplayValue();
+                    } else {
+                        senderDisplay = gs.getUserName();
+                    }
+                } catch (e1) {
+                    senderDisplay = gs.getUserName();
+                }
+                try {
+                    // Prefer a namespaced event for notifications
+                    gs.eventQueue('x_1731528_incide_1.incident.reminder', inc, note, senderDisplay);
+                } catch (e) {
+                    // Optional fallback to GlideNotification if available in this instance/scope
+                    try {
+                        if (typeof GlideNotification === 'function') {
+                            var gn = new GlideNotification();
+                            if (typeof gn.setFromUser === 'function') gn.setFromUser(fromUser);
+                            if (typeof gn.setSubject === 'function') gn.setSubject('Incident Reminder: ' + inc.getDisplayValue('number'));
+                            if (typeof gn.setBody === 'function') gn.setBody('From: ' + senderDisplay + '\n\n' + note);
+                            if (typeof gn.setRecipients === 'function') gn.setRecipients(assignedTo);
+                            if (typeof gn.send === 'function') gn.send();
+                        }
+                    } catch (ignore) {}
+                }
+            }
+
+            return { success: true, message: 'Reminder added and notification queued.' };
+        } catch (ex) {
+            return { success: false, message: String(ex) };
+        }
+    },
+
+    type: 'IncidentReminder'
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>9e7b5a2b83a132109135f6b6feaad555</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>IncidentReminder</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Incident Enhancer" source="x_1731528_incide_1">34125aaf830132109135f6b6feaad35d</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Incident Enhancer">34125aaf830132109135f6b6feaad35d</sys_scope>
+        <sys_update_name>sys_script_include_9e7b5a2b83a132109135f6b6feaad555</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+    </sys_script_include>
+</record_update>
